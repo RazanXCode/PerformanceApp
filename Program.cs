@@ -15,14 +15,9 @@ public class Employee
     public int PerformanceRating { get; set; }
     public int DepartmentId { get; set; }
 
-    // Navigation property for Department (Many-to-One)
     public Department Department { get; set; }
-
-    // Many-to-Many relationship with Project
     public List<Project> Projects { get; set; } = new List<Project>();
     public ICollection<EmployeeProject> EmployeeProjects { get; set; }
-
-    // Bonus property to store the calculated bonus
     public decimal Bonus { get; set; }
 }
 
@@ -62,20 +57,19 @@ class Program
                 sql1,
                 (employee, project) =>
                 {
-                    // Check if the employee already exists in the dictionary
                     if (!employeeDictionary.TryGetValue(employee.EmployeeName, out var employeeEntry))
                     {
-                        // If not, add the employee and initialize their project list
+                       
                         employeeEntry = employee;
                         employeeDictionary.Add(employee.EmployeeName, employeeEntry);
                     }
 
-                    // Add the project to the employee's project list
+                   
                     employeeEntry.Projects.Add(project);
 
                     return employeeEntry;
                 },
-                splitOn: "ProjectName" // This tells Dapper to split the results at ProjectName
+                splitOn: "ProjectName" 
             );
 
             // Display the results
@@ -102,27 +96,27 @@ class Program
                 JOIN EmployeeProjects ep ON e.EmployeeId = ep.EmployeeId
                 JOIN Projects p ON ep.ProjectId = p.ProjectId";
 
-            // Fetch the data using Dapper and map the results to Employee and Project objects
+           
             var employeeDictionary2 = new Dictionary<string, Employee>();
 
             var employees2 = connection.Query<Employee, Project, Employee>(
                 sql2,
                 (employee, project) =>
                 {
-                    // Check if the employee already exists in the dictionary
+                   
                     if (!employeeDictionary.TryGetValue(employee.EmployeeName, out var employeeEntry))
                     {
-                        // If not, add the employee and initialize their project list
+                       
                         employeeEntry = employee;
                         employeeDictionary2.Add(employee.EmployeeName, employeeEntry);
                     }
 
-                    // Add the project to the employee's project list
+                   
                     employeeEntry.Projects.Add(project);
 
                     return employeeEntry;
                 },
-                splitOn: "ProjectName" // This tells Dapper to split the results at ProjectName
+                splitOn: "ProjectName" 
             );
 
             // Display the results
@@ -131,7 +125,7 @@ class Program
                 Console.WriteLine($"Employee: {employee.EmployeeName}");
                 foreach (var project in employee.Projects)
                 {
-                    // This will work as expected
+                   
                     Console.WriteLine($"- Project: {project.ProjectName}, Deadline: {project.ProjectDeadline.ToShortDateString()}");
                 }
             }
@@ -156,10 +150,10 @@ class Program
                     END AS Bonus
                 FROM Employees e";
 
-            // Execute the query using Dapper and map the results to Employee objects
+           
             var employeesWithBonuses = connection.Query<Employee>(bonusSql).ToList();
 
-            //Display bonus details
+           
             foreach (var employee in employeesWithBonuses)
             {
                 Console.WriteLine($"Employee: {employee.EmployeeName}");
@@ -168,12 +162,9 @@ class Program
             }
 
             //Task 5
-            // Set department ID for which we want to fetch the financial report
         int departmentId = 1;
 
-        // Task 5 - Compare performance of EF Core and Dapper
-
-        // Measure time taken by EF Core
+    
         var stopwatch = Stopwatch.StartNew();
         Console.WriteLine("Fetching financial report using EF Core:");
         var efCoreReport = new FinancialReportEFCore(new AppDbContext());
@@ -191,7 +182,7 @@ class Program
     }
 }
 
-// EF Core version for fetching financial report
+
 public class FinancialReportEFCore
 {
     private readonly AppDbContext _context;
@@ -213,7 +204,7 @@ public class FinancialReportEFCore
     }
 }
 
-// Dapper version for fetching financial report
+
 public class FinancialReportDapper
 {
     private readonly string _connectionString;

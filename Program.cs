@@ -231,10 +231,9 @@ public class FinancialReportDapper
                 WHERE DepartmentId = @DepartmentId";
 
                 var departmentSalary = connection.ExecuteScalar<decimal>(departmentSalaryQuery, new { DepartmentId = departmentId });
-                var projectBudget = connection.ExecuteScalar<decimal>(projectBudgetQuery, new { DepartmentId = departmentId });
 
                 Console.WriteLine($"Total Salary for Department {departmentId}: {departmentSalary:C}");
-                Console.WriteLine($"Total Project Budget for Department {departmentId}: {projectBudget:C}");
+                
             }
 
         }

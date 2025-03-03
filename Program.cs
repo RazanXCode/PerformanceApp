@@ -6,34 +6,33 @@ using System.Linq;
 using PerformanceApp.Models;
 using System.Diagnostics; 
 
-// Employee and Project model definitions
-// Employee and Project model definitions
-// public class Employee
-// {
-//     public int EmployeeId { get; set; }
-//     public string EmployeeName { get; set; }
-//     public decimal Salary { get; set; }
-//     public int PerformanceRating { get; set; }
-//     public int DepartmentId { get; set; }
+// Added the new properties here and migrate the changes 
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string EmployeeName { get; set; }
+    public decimal Salary { get; set; }
+    public int PerformanceRating { get; set; }
+    public int DepartmentId { get; set; }
 
-//     // Navigation property for Department (Many-to-One)
-//     public Department Department { get; set; }
+    // Navigation property for Department (Many-to-One)
+    public Department Department { get; set; }
 
-//     // Many-to-Many relationship with Project
-//     public List<Project> Projects { get; set; } = new List<Project>();
-//     public ICollection<EmployeeProject> EmployeeProjects { get; set; }
+    // Many-to-Many relationship with Project
+    public List<Project> Projects { get; set; } = new List<Project>();
+    public ICollection<EmployeeProject> EmployeeProjects { get; set; }
 
-//     // Bonus property to store the calculated bonus
-//     public decimal Bonus { get; set; }
-// }
-
+    // Bonus property to store the calculated bonus
+    public decimal Bonus { get; set; }
+}
 
 
-// public class Project
-// {
-//     public string ProjectName { get; set; }
-//     public DateTime ProjectDeadline { get; set; }
-// }
+
+public class Project
+{
+    public string ProjectName { get; set; }
+    public DateTime ProjectDeadline { get; set; }
+}
 
 class Program
 {
@@ -208,12 +207,9 @@ public class FinancialReportEFCore
             .Where(e => e.DepartmentId == departmentId)
             .Sum(e => e.Salary);
 
-        var projectBudget = _context.Projects
-            .Where(p => p.DepartmentId == departmentId)
-            .Sum(p => p.Budget);
 
         Console.WriteLine($"Total Salary for Department {departmentId}: {departmentSalary:C}");
-        Console.WriteLine($"Total Project Budget for Department {departmentId}: {projectBudget:C}");
+       
     }
 }
 
